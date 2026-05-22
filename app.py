@@ -1,4 +1,5 @@
 import streamlit as st
+from backend import extract_text_from_pdf
 
 # Page config
 st.set_page_config(
@@ -19,4 +20,28 @@ uploaded_file = st.file_uploader(
 )
 
 # Analyze button
-analyze_button = st.button("Analyze Paper")
+# analyze_button = st.button("Analyze Paper")
+# Analyze button
+if st.button("Analyze Paper"):
+
+    if uploaded_file is None:
+        st.warning("Please upload a PDF first.")
+
+    else:
+        # Save uploaded PDF temporarily
+        pdf_path = f"uploaded_papers/{uploaded_file.name}"
+
+        with open(pdf_path, "wb") as f:
+            f.write(uploaded_file.getbuffer())
+
+        st.success("PDF uploaded successfully!")
+
+        # Extract text
+        extracted_text = extract_text_from_pdf(pdf_path)
+
+        # Show extraction stats
+        st.subheader("📚 Extracted Text Preview")
+
+        st.write(extracted_text[:3000])
+
+        st.info(f"Total characters extracted: {len(extracted_text)}")
