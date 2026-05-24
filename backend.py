@@ -1,5 +1,5 @@
 from pypdf import PdfReader
-import langchain.text_splitter
+
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 def extract_text_from_pdf(pdf_path):

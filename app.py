@@ -1,6 +1,6 @@
 import streamlit as st
 from backend import extract_text_from_pdf
-
+from backend import split_text_into_chunks
 # Page config
 st.set_page_config(
     page_title="AI Research Paper Explainer",
@@ -38,10 +38,22 @@ if st.button("Analyze Paper"):
 
         # Extract text
         extracted_text = extract_text_from_pdf(pdf_path)
+        # Split text into chunks
+        chunks = split_text_into_chunks(extracted_text)
 
         # Show extraction stats
         st.subheader("📚 Extracted Text Preview")
 
         st.write(extracted_text[:3000])
 
+        # st.info(f"Total characters extracted: {len(extracted_text)}")
         st.info(f"Total characters extracted: {len(extracted_text)}")
+
+        st.subheader("✂️ Chunk Information")
+
+        st.write(f"Total chunks created: {len(chunks)}")
+
+        # Show first chunk
+        st.write("First chunk preview:")
+
+        st.write(chunks[0])
