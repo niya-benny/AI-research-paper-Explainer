@@ -1,6 +1,8 @@
 import streamlit as st
 from backend import extract_text_from_pdf
 from backend import split_text_into_chunks
+from backend import build_llm
+from backend import generate_summary
 # Page config
 st.set_page_config(
     page_title="AI Research Paper Explainer",
@@ -57,3 +59,17 @@ if st.button("Analyze Paper"):
         st.write("First chunk preview:")
 
         st.write(chunks[0])
+
+        # Combine first few chunks
+        paper_content = " ".join(chunks[:3])
+
+        # Build AI model
+        llm = build_llm()
+
+        with st.spinner("Generating AI Summary..."):
+
+            summary = generate_summary(llm, paper_content)
+
+        st.subheader("🧠 AI Research Summary")
+
+        st.write(summary)

@@ -2,6 +2,17 @@ from pypdf import PdfReader
 
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+from langchain_openai import ChatOpenAI
+
+from langchain_core.prompts import PromptTemplate
+
+from langchain.chains.llm import LLMChain
+
 def extract_text_from_pdf(pdf_path):
     """
     Extracts all text from a PDF file.
@@ -45,3 +56,33 @@ def split_text_into_chunks(text):
     chunks = text_splitter.split_text(text)
 
     return chunks
+
+def build_llm():
+    """
+    Creates and returns the OpenAI LLM.
+    """
+
+    llm = ChatOpenAI(
+        api_key=os.getenv("OPENAI_API_KEY"),
+        model="gpt-4o-mini",
+        temperature=0.3
+    )
+
+    return llm
+
+SUMMARY_PROMPT = PromptTemplate(
+    input_variables=["paper_text"],
+    template="""
+    You are an AI research assistant.
+
+    Read the following research paper content and generate:
+
+    1. A simple summary
+    2. Main objective of the paper
+    3. Important findings
+
+    Research Paper:
+    {paper_text}
+    """
+)
+
