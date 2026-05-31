@@ -11,7 +11,8 @@ from langchain_openai import ChatOpenAI
 
 from langchain_core.prompts import PromptTemplate
 
-from langchain.chains.llm import LLMChain
+from langchain_core.output_parsers import StrOutputParser
+from langchain_community.llms import Ollama
 
 def extract_text_from_pdf(pdf_path):
     """
@@ -57,14 +58,12 @@ def split_text_into_chunks(text):
 
     return chunks
 
-def build_llm():
-    """
-    Creates and returns the OpenAI LLM.
-    """
 
-    llm = ChatOpenAI(
-        api_key=os.getenv("OPENAI_API_KEY"),
-        model="gpt-4o-mini",
+
+def build_llm():
+
+    llm = Ollama(
+        model="phi3:mini",
         temperature=0.3
     )
 
@@ -86,3 +85,18 @@ SUMMARY_PROMPT = PromptTemplate(
     """
 )
 
+def generate_summary(llm, text):
+    """
+    Generates AI summary from paper text.
+    """
+
+    parser = StrOutputParser()
+
+    # Modern LangChain Expression Language (LCEL)
+    chain = SUMMARY_PROMPT | llm | parser
+
+    result = chain.invoke({
+        "paper_text": text
+    })
+
+    return result
