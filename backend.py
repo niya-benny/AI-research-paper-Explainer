@@ -58,10 +58,9 @@ def split_text_into_chunks(text):
 
     return chunks
 
-
-
 def build_llm():
-
+    print("Loading phi3:mini")
+    
     llm = Ollama(
         model="phi3:mini",
         temperature=0.3
