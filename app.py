@@ -4,6 +4,7 @@ from backend import split_text_into_chunks
 from backend import build_llm
 from backend import generate_summary
 from backend import explain_methodology
+from backend import generate_key_points
 # Page config
 st.set_page_config(
     page_title="AI Research Paper Explainer",
@@ -75,10 +76,23 @@ if st.button("Analyze Paper"):
 
         st.write(summary)
 
-        methodology = explain_methodology(
-            llm,
-            paper_content
-        )
+        with st.spinner("Extracting methodology..."):
+
+            methodology = explain_methodology(
+                llm,
+                paper_content
+            )
 
         st.subheader("⚙️ Methodology Explained")
         st.write(methodology)
+
+        with st.spinner("Extracting Key Contributions..."):
+
+            key_points = generate_key_points(
+                llm,
+                paper_content
+            )
+
+        st.subheader("⭐ Key Contributions & Findings")
+
+        st.write(key_points)

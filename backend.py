@@ -136,3 +136,38 @@ def explain_methodology(llm, text):
     })
 
     return result
+
+KEY_POINTS_PROMPT = PromptTemplate(
+    input_variables=["paper_text"],
+    template="""
+You are an expert research analyst.
+
+Read the research paper content below.
+
+Generate:
+
+1. Top 5 Key Contributions
+2. Important Findings
+3. Limitations of the Study
+
+Paper Content:
+{paper_text}
+
+Format the answer using bullet points.
+"""
+)
+
+def generate_key_points(llm, text):
+    """
+    Extracts key contributions and findings.
+    """
+
+    parser = StrOutputParser()
+
+    chain = KEY_POINTS_PROMPT | llm | parser
+
+    result = chain.invoke({
+        "paper_text": text
+    })
+
+    return result
