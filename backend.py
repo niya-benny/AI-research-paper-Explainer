@@ -171,3 +171,45 @@ def generate_key_points(llm, text):
     })
 
     return result
+
+VIVA_PROMPT = PromptTemplate(
+    input_variables=["paper_text"],
+    template="""
+You are a university professor.
+
+Read the research paper content below.
+
+Generate:
+
+1. 10 Viva Questions
+2. Short Answers for each question
+
+Paper Content:
+{paper_text}
+
+Format:
+
+Q1:
+A1:
+
+Q2:
+A2:
+
+...
+"""
+)
+
+def generate_viva_questions(llm, text):
+    """
+    Generates viva questions from research paper.
+    """
+
+    parser = StrOutputParser()
+
+    chain = VIVA_PROMPT | llm | parser
+
+    result = chain.invoke({
+        "paper_text": text
+    })
+
+    return result
