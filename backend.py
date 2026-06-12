@@ -99,3 +99,40 @@ def generate_summary(llm, text):
     })
 
     return result
+
+
+METHODOLOGY_PROMPT = PromptTemplate(
+    input_variables=["paper_text"],
+    template="""
+You are a research assistant.
+
+Read the research paper content below and explain the methodology in simple language.
+
+Focus on:
+1. Dataset used
+2. Models used
+3. Research process
+4. Tools or technologies used
+5. How experiments were conducted
+
+Paper Content:
+{paper_text}
+
+Explain in easy-to-understand bullet points.
+"""
+)
+
+def explain_methodology(llm, text):
+    """
+    Explains the methodology of the research paper.
+    """
+
+    parser = StrOutputParser()
+
+    chain = METHODOLOGY_PROMPT | llm | parser
+
+    result = chain.invoke({
+        "paper_text": text
+    })
+
+    return result
