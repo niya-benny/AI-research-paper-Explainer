@@ -5,6 +5,7 @@ from backend import build_llm
 from backend import generate_summary
 from backend import explain_methodology
 from backend import generate_key_points
+from backend import generate_viva_questions
 # Page config
 st.set_page_config(
     page_title="AI Research Paper Explainer",
@@ -96,3 +97,14 @@ if st.button("Analyze Paper"):
         st.subheader("⭐ Key Contributions & Findings")
 
         st.write(key_points)
+
+        with st.spinner("Generating Viva Questions..."):
+
+            viva_questions = generate_viva_questions(
+                llm,
+                paper_content
+            )
+
+        st.subheader("🎓 Viva Questions & Answers")
+
+        st.write(viva_questions)
