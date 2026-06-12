@@ -3,6 +3,7 @@ from backend import extract_text_from_pdf
 from backend import split_text_into_chunks
 from backend import build_llm
 from backend import generate_summary
+from backend import explain_methodology
 # Page config
 st.set_page_config(
     page_title="AI Research Paper Explainer",
@@ -73,3 +74,11 @@ if st.button("Analyze Paper"):
         st.subheader("🧠 AI Research Summary")
 
         st.write(summary)
+
+        methodology = explain_methodology(
+            llm,
+            paper_content
+        )
+
+        st.subheader("⚙️ Methodology Explained")
+        st.write(methodology)
